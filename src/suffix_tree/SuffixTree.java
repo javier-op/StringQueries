@@ -7,12 +7,31 @@ public class SuffixTree {
 
     public SuffixTree(String text) {
         this.text = text;
-        cleanText();
-        root = new SuffixNode();
+        root = new SuffixNode(this);
     }
 
-    private void cleanText() {
+    public char getChar(int index){
+        return text.charAt(index);
     }
 
-    
+    public void insert(int index){
+        root.insert(index);
+    }
+
+    public int getLastIndex(){
+        return text.length();
+    }
+
+    public String getSubString(int from){
+        return text.substring(from);
+    }
+
+    public String getSubString(int from, int to){
+        return text.substring(from, to);
+    }
+
+    public SuffixNode searchNode(){
+        return root.
+    }
+
 }
