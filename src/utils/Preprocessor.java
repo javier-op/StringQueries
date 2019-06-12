@@ -1,17 +1,17 @@
 package utils;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.io.IOException;
 import java.text.Normalizer;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.HashSet;
 
 public class Preprocessor {
 
@@ -90,7 +90,8 @@ public class Preprocessor {
 		Charset charset = Charset.forName(charset_name);
 		Path full_path = Paths.get(this.active_dir, output_name);
 		try {
-		Files.writeString(full_path, text, charset);} catch (IOException e) {
+			Files.writeString(full_path, text, charset);
+		} catch (IOException e) {
 			System.err.println("The output file could not be written, received the following exception::");
 			System.err.println(e.getClass().getSimpleName());
 			System.exit(1);
