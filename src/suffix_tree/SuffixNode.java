@@ -12,6 +12,10 @@ class SuffixNode {
 		this.tree = tree;
 	}
 
+	int edgeNumber() {
+		return this.edges.size();
+	}
+
 	private void addEdge(char character, Edge edge) {
 		this.edges.put(character, edge);
 	}

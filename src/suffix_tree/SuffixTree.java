@@ -10,6 +10,22 @@ public class SuffixTree {
 		this.root = new SuffixNode(this);
 	}
 
+	public boolean createNodes() {
+		try {
+			if (this.root.edgeNumber() > 0) {
+				// If it's already created, reset it
+				this.root = new SuffixNode(this);
+			}
+			for (int i = text.length() - 1; i >= 0; i--) {
+				// Insert every single index of the text
+				this.insert(i);
+			}
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
+
 	char getChar(int index) {
 		return this.text.charAt(index);
 	}
