@@ -19,7 +19,7 @@ class Edge {
 	public void setFrom(int i) {
 		int prev_from = this.from;
 		this.from = i;
-		this.len = prev_from + len - this.len;
+		this.len = prev_from + this.len - this.from;
 	}
 
 	public int getLen() {
