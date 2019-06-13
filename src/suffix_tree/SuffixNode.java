@@ -73,4 +73,32 @@ class SuffixNode {
 			this.edges.put(this.tree.getChar(index), newEdge);
 		}
 	}
+
+	public SuffixNode searchNode(String text, int index) {
+		int remaining_len = text.length() - index - 1;
+		if (remaining_len <= 0) {
+			// If the string has been fully consumed, this is the target node
+			return this;
+		}
+		// We'll return an empty node if there's no match and only change this when we find a match
+		SuffixNode result = new SuffixNode(this.tree);
+		char first_char = text.charAt(index);
+		if (this.edges.containsKey(first_char)) {
+			Edge fitting_edge = this.edges.get(first_char);
+			int edge_len = fitting_edge.getLen();
+			int chars_to_compare = edge_len;
+			if (edge_len > remaining_len) {
+				// Fitting edge is longer than the input
+				// -> If all the chars remaining fit, the node following the edge is the search result
+				chars_to_compare = remaining_len;
+			}
+			int starting_char = fitting_edge.getFrom();
+			String substr_to_compare = this.tree.getSubString(starting_char, starting_char + chars_to_compare - 1);
+			if (substr_to_compare.equals(text.substring(index, index + chars_to_compare - 1))) {
+				// If the edge fits, follow the edge in the search
+				result = fitting_edge.getNode().searchNode(text, index + chars_to_compare - 1);
+			}
+		}
+		return result;
+	}
 }

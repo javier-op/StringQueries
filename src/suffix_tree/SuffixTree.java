@@ -46,9 +46,8 @@ public class SuffixTree {
 		return this.text.substring(from, to);
 	}
 
-	public SuffixNode searchNode() {
-		// TODO: Implement?
-		return this.root;
+	public SuffixNode searchNode(String text) {
+		return this.root.searchNode(text, 0);
 	}
 
 }
