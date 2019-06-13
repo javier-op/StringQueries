@@ -6,27 +6,27 @@ class Edge {
 	private int len;
 	private SuffixNode node;
 
-	public Edge(int from, int len, SuffixNode node) {
+	Edge(int from, int len, SuffixNode node) {
 		this.from = from;
 		this.len = len;
 		this.node = node;
 	}
 
-	public int getFrom() {
+	int getFrom() {
 		return this.from;
 	}
 
-	public void setFrom(int i) {
+	void setFrom(int i) {
 		int prev_from = this.from;
 		this.from = i;
 		this.len = prev_from + this.len - this.from;
 	}
 
-	public int getLen() {
+	int getLen() {
 		return this.len;
 	}
 
-	public SuffixNode getNode() {
+	SuffixNode getNode() {
 		return this.node;
 	}
 }
