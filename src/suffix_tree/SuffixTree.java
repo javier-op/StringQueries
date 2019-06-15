@@ -1,5 +1,7 @@
 package suffix_tree;
 
+import java.util.Stack;
+
 public class SuffixTree {
 
 	private String text;
@@ -31,7 +33,7 @@ public class SuffixTree {
 	}
 
 	public void insert(int index) {
-		this.root.insert(index);
+		this.root.insert(index, index, new Stack<SuffixNode>());
 	}
 
 	int getTextLenght() {
