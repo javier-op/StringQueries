@@ -4,101 +4,76 @@ import java.util.HashMap;
 
 class SuffixNode {
 
-	private HashMap<Character, Edge> edges;
+	private int from;
+	private int len;
+	private HashMap<Character, SuffixNode> children;
 	private SuffixTree tree;
 
 	SuffixNode(SuffixTree tree) {
-		this.edges = new HashMap<>();
+		this.children = new HashMap<>();
 		this.tree = tree;
 	}
 
-	int edgeNumber() {
-		return this.edges.size();
+	private SuffixNode(SuffixTree tree, int from, int len) {
+		this(tree);
+		this.from = from;
+		this.len = len;
 	}
 
-	private void addEdge(char character, Edge edge) {
-		this.edges.put(character, edge);
-	}
-
-	void insert(int index) {
+	void insert(int index, int start_of_suffix) {
 		int remaining_len_from_index = this.tree.getTextLenght() - index - 1;
 		char first_char = this.tree.getChar(index);
-		if (this.edges.containsKey(first_char)) {
-			// Contains an edge that follows the input
-			Edge current_edge = this.edges.get(first_char);
-			int edge_from_index = current_edge.getFrom();
-			int edge_length = current_edge.getLen();
-			int chars_to_compare = edge_length;
-			int division = edge_from_index;
-			if (edge_length > remaining_len_from_index) {
-				// Current edge is longer than the input
-				// -> Input would be a new node dividing the current edge
-				// As all input comes from the same text and it is terminated with an special char,
-				// it will necessarily differ somewhere in the remaining chars
-				chars_to_compare = remaining_len_from_index;
-			}
+		if (this.children.containsKey(first_char)) {
+			SuffixNode next_node = this.children.get(first_char);
+			int chars_to_compare = Math.min(remaining_len_from_index, next_node.getLen());
+			int division_index = -1;
 			for (int i = 1; i < chars_to_compare; i++) {
 				// Break when the division point is found
-				if (this.tree.getChar(index + i) != this.tree.getChar(edge_from_index + i)) {
-					division = i;
+				if (this.tree.getChar(index + i) != this.tree.getChar(next_node.getFrom() + i)) {
+					division_index = i;
 					break;
 				}
 			}
-			if (division == edge_from_index) {
+			if (division_index < 0) {
 				// The substring of the edge and the input are equal
 				// -> The input should be inserted following this edge
-				current_edge.getNode().insert(index + edge_length);
+				next_node.insert(index + next_node.getLen(), start_of_suffix);
 			} else {
 				// The substring of the edge differs from the input
 				// -> The input would create a new node dividing the current edge, then descend from it
-				int length_diff = division - edge_from_index;
-				SuffixNode division_node = new SuffixNode(this.tree);
-				SuffixNode input_node = new SuffixNode(this.tree);
-				Edge division_edge = new Edge(edge_from_index, length_diff, division_node);
-				Edge input_edge = new Edge(division, remaining_len_from_index - length_diff, input_node);
+				int length_diff = division_index - next_node.getFrom();
+				SuffixNode division_node = new SuffixNode(this.tree, next_node.getFrom(), length_diff);
+				SuffixNode input_node = new SuffixNode(this.tree, division_index, remaining_len_from_index);
 				// Replace current_edge with division_edge
-				this.edges.replace(first_char, division_edge);
+				this.children.replace(first_char, division_node);
 				// Add current_edge to division node
-				current_edge.setFrom(division);
-				division_node.addEdge(this.tree.getChar(division), current_edge);
+				next_node.setFrom(division_index);
+				division_node.addChild(this.tree.getChar(division_index), next_node);
 				// Add input_node to division_node
-				division_node.addEdge(this.tree.getChar(index + length_diff), input_edge);
+				division_node.addChild(this.tree.getChar(index + length_diff), input_node);
 			}
 		} else {
 			// Doesn't contain an edge that follows the input
 			// -> The input fits just to this edge
 			// -> Insert a new edge starting in this node
-			SuffixNode newNode = new SuffixNode(this.tree);
-			Edge newEdge = new Edge(index, remaining_len_from_index, newNode);
-			this.edges.put(this.tree.getChar(index), newEdge);
+			SuffixNode newNode = new SuffixNode(this.tree, index, remaining_len_from_index);
+			this.children.put(this.tree.getChar(index), newNode);
 		}
 	}
 
-	public SuffixNode searchNode(String text, int index) {
-		int remaining_len = text.length() - index - 1;
-		if (remaining_len <= 0) {
-			// If the string has been fully consumed, this is the target node
-			return this;
-		}
-		// We'll return an empty node if there's no match and only change this when we find a match
-		SuffixNode result = new SuffixNode(this.tree);
-		char first_char = text.charAt(index);
-		if (this.edges.containsKey(first_char)) {
-			Edge fitting_edge = this.edges.get(first_char);
-			int edge_len = fitting_edge.getLen();
-			int chars_to_compare = edge_len;
-			if (edge_len > remaining_len) {
-				// Fitting edge is longer than the input
-				// -> If all the chars remaining fit, the node following the edge is the search result
-				chars_to_compare = remaining_len;
-			}
-			int starting_char = fitting_edge.getFrom();
-			String substr_to_compare = this.tree.getSubString(starting_char, starting_char + chars_to_compare - 1);
-			if (substr_to_compare.equals(text.substring(index, index + chars_to_compare - 1))) {
-				// If the edge fits, follow the edge in the search
-				result = fitting_edge.getNode().searchNode(text, index + chars_to_compare - 1);
-			}
-		}
-		return result;
+	private void addChild(char c, SuffixNode node) {
+		children.put(c, node);
+	}
+
+	private int getFrom() {
+		return from;
+	}
+
+	private int getLen() {
+		return len;
+	}
+
+	private void setFrom(int from) {
+		this.from = from;
 	}
 }
