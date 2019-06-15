@@ -8,12 +8,13 @@ class SuffixNode {
 
 	private HashMap<Character, Edge> edges;
 	private HashSet<SuffixNode> leaves; // Direct link to all leaves that hang from this node.
-	private int value; // Pointer to text used in leaves.
+	private Integer value; // Pointer to text used in leaves.
 	private SuffixTree tree;
 
 	SuffixNode(SuffixTree tree) {
 		this.edges = new HashMap<>();
 		this.leaves = new HashSet<>();
+		this.value = null;
 		this.tree = tree;
 	}
 
