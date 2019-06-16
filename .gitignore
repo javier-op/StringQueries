@@ -24,4 +24,7 @@ hs_err_pid*
 
 # Ignore local configuration #
 
-.idea/
+.idea/workspace.xml
+.idea/misc.xml
+
+out/
