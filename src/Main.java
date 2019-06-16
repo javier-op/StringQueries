@@ -5,10 +5,9 @@ public class Main {
         String s= "guaguaalagua\0";
         SuffixTree st = new SuffixTree(s);
 
-        for(int i = 0; i < s.length(); i++) {
-            st.insert(i);
-        }
+        String target = "guaa";
 
+        Integer[] numbers = st.locate(target);
         System.out.println("Done!");
     }
 }

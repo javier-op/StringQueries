@@ -18,6 +18,10 @@ class SuffixNode {
 		this.tree = tree;
 	}
 
+	Integer getValue() {
+		return this.value;
+	}
+
 	int edgeNumber() {
 		return this.edges.size();
 	}
@@ -30,7 +34,7 @@ class SuffixNode {
 		this.value = value;
 	}
 
-	private HashSet<SuffixNode> getLeaves() {
+	 HashSet<SuffixNode> getLeaves() {
 		return this.leaves;
 	}
 
@@ -49,7 +53,7 @@ class SuffixNode {
 			// Contains an edge that follows the input
 			Edge current_edge = this.edges.get(first_char);
 			int current_from_index = current_edge.getFrom();
-			int chars_to_compare = Math.min(current_edge.getLen(), remaining_len_from_index);
+			int chars_to_compare = Math.min(current_edge.length(), remaining_len_from_index);
 			int division = 0; // Marks at which index the substrings differ.
 			for (int i = 1; i < chars_to_compare ; i++) {
 				// Break when the division point is found
@@ -62,7 +66,7 @@ class SuffixNode {
 				// The substring of the edge and the input are equal
 				// -> The input should be inserted following this edge
 				parents.push(this);
-				current_edge.getNode().insert(index + current_edge.getLen(), original_index, parents);
+				current_edge.getNode().insert(index + current_edge.length(), original_index, parents);
 			} else {
 				// The substring of the edge differs from the input
 				// -> The input would create a new node dividing the current edge, then descend from it
@@ -116,7 +120,7 @@ class SuffixNode {
 	}
 
 	public SuffixNode searchNode(String text, int index) {
-		int remaining_len = text.length() - index - 1;
+		int remaining_len = text.length() - index;
 		if (remaining_len <= 0) {
 			// If the string has been fully consumed, this is the target node
 			return this;
@@ -126,13 +130,7 @@ class SuffixNode {
 		char first_char = text.charAt(index);
 		if (this.edges.containsKey(first_char)) {
 			Edge fitting_edge = this.edges.get(first_char);
-			int edge_len = fitting_edge.getLen();
-			int chars_to_compare = edge_len;
-			if (edge_len > remaining_len) {
-				// Fitting edge is longer than the input
-				// -> If all the chars remaining fit, the node following the edge is the search result
-				chars_to_compare = remaining_len;
-			}
+			int chars_to_compare = Math.min(fitting_edge.length(), remaining_len);
 			int starting_char = fitting_edge.getFrom();
 			String substr_to_compare = this.tree.getSubString(starting_char, starting_char + chars_to_compare - 1);
 			if (substr_to_compare.equals(text.substring(index, index + chars_to_compare - 1))) {
@@ -141,5 +139,27 @@ class SuffixNode {
 			}
 		}
 		return result;
+	}
+
+	public SuffixNode search(String text) {
+		char first_char = text.charAt(0);
+		SuffixNode output = null;
+		if(this.edges.containsKey(first_char)) {
+			Edge fitting_edge = this.edges.get(first_char);
+			int text_len = text.length();
+			int edge_len = fitting_edge.length();
+			int edge_from = fitting_edge.getFrom();
+
+			if(text.length() <= edge_len) {
+				if(text.equals(this.tree.getSubString(edge_from, edge_from + text_len))) {
+					output = fitting_edge.getNode();
+				}
+			} else {
+				if(text.substring(0, edge_len).equals(this.tree.getSubString(edge_from, edge_from + edge_len))) {
+					output = fitting_edge.getNode().search(text.substring(edge_len));
+				}
+			}
+		}
+		return output;
 	}
 }

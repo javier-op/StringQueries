@@ -22,7 +22,7 @@ class Edge {
 		this.len = prev_from + this.len - this.from;
 	}
 
-	int getLen() {
+	int length() {
 		return this.len;
 	}
 

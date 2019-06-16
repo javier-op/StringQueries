@@ -1,5 +1,7 @@
 package suffix_tree;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Stack;
 
 public class SuffixTree {
@@ -10,6 +12,10 @@ public class SuffixTree {
 	public SuffixTree(String text) {
 		this.text = text;
 		this.root = new SuffixNode(this);
+
+		for(int i = 0; i < text.length(); i++) {
+			this.insert(i);
+		}
 	}
 
 	public boolean createNodes() {
@@ -48,8 +54,22 @@ public class SuffixTree {
 		return this.text.substring(from, to);
 	}
 
-	public SuffixNode searchNode(String text) {
-		return this.root.searchNode(text, 0);
+	public int count(String text) {
+		return this.root.search(text).getLeaves().size();
+	}
+
+	public Integer[] locate(String text) {
+		HashSet<SuffixNode> leaves = this.root.search(text).getLeaves();
+		Integer[] output = new Integer[leaves.size()];
+		int i = 0;
+		for(SuffixNode node : leaves) {
+			output[i++] = node.getValue();
+		}
+		return output;
+	}
+
+	private SuffixNode searchNode(String text) {
+		return this.root.search(text);
 	}
 
 }
