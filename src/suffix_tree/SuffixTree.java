@@ -12,24 +12,24 @@ public class SuffixTree {
 		this.text = text;
 		this.root = new SuffixNode(this);
 
-		for(int i = 0; i < text.length(); i++) {
+		for (int i = 0; i < text.length(); i++) {
 			this.insert(i);
 		}
 	}
 
-    public int count(String text) {
-        return this.root.search(text).getLeaves().size();
-    }
+	public int count(String text) {
+		return this.root.search(text).getLeaves().size();
+	}
 
-    public Integer[] locate(String text) {
-        HashSet<SuffixNode> leaves = this.root.search(text).getLeaves();
-        Integer[] output = new Integer[leaves.size()];
-        int i = 0;
-        for(SuffixNode node : leaves) {
-            output[i++] = node.getValue();
-        }
-        return output;
-    }
+	public Integer[] locate(String text) {
+		HashSet<SuffixNode> leaves = this.root.search(text).getLeaves();
+		Integer[] output = new Integer[leaves.size()];
+		int i = 0;
+		for (SuffixNode node : leaves) {
+			output[i++] = node.getValue();
+		}
+		return output;
+	}
 
 	char getChar(int index) {
 		return this.text.charAt(index);
@@ -43,8 +43,8 @@ public class SuffixTree {
 		return this.text.substring(from, to);
 	}
 
-    private void insert(int index) {
-        this.root.insert(index, index, new Stack<>());
-    }
+	private void insert(int index) {
+		this.root.insert(index, index, new Stack<>());
+	}
 
 }
