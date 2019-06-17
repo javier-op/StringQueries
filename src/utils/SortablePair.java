@@ -1,10 +1,10 @@
 package utils;
 
-public class SortablePair<R> implements Comparable<SortablePair<R>> {
+public class SortablePair implements Comparable<SortablePair> {
 	private final Integer first;
-	private final R second;
+	private final String second;
 
-	public SortablePair(Integer first, R second) {
+	public SortablePair(Integer first, String second) {
 		this.first = first;
 		this.second = second;
 	}
@@ -13,7 +13,7 @@ public class SortablePair<R> implements Comparable<SortablePair<R>> {
 		return this.first;
 	}
 
-	public R getSecond() {
+	public String getSecond() {
 		return this.second;
 	}
 
@@ -26,7 +26,7 @@ public class SortablePair<R> implements Comparable<SortablePair<R>> {
 	}
 
 	@Override
-	public int compareTo(SortablePair<R> o) {
+	public int compareTo(SortablePair o) {
 		return this.first - o.getFirst();
 	}
 }
