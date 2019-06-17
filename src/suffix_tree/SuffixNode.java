@@ -1,6 +1,6 @@
 package suffix_tree;
 
-import utils.Pair;
+import utils.SortablePair;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,8 +33,8 @@ class SuffixNode {
 		return this.leaves;
 	}
 
-	public ArrayList<Pair<Integer, String>> getStrTimesByLenght(int depth, String read) {
-		ArrayList<Pair<Integer, String>> result = new ArrayList<>();
+	public ArrayList<SortablePair<String>> getStrTimesByLenght(int depth, String read) {
+		ArrayList<SortablePair<String>> result = new ArrayList<>();
 		if (depth <= 0) {
 			// If the depth has been reached
 			if (depth < 0) {
@@ -42,7 +42,7 @@ class SuffixNode {
 				read = read.substring(0, read.length() + depth);
 			}
 			// Add the amount of leaves and the string already read to the result
-			result.add(new Pair<>(this.leaves.size(), read));
+			result.add(new SortablePair<>(this.leaves.size(), read));
 		} else {
 			// Recursively get nodes with more depth through all the edges from this node
 			Edge edge;
