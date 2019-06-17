@@ -38,7 +38,7 @@ public class SuffixTree {
 	public String[] top_K_Q(int k, int q) {
 		String[] result = new String[k];
 		// Get all the strings of length q with their number of appearances
-		ArrayList<SortablePair> stringsDepthQ = this.root.getStrTimesByLenght(q, "");
+		ArrayList<SortablePair> stringsDepthQ = this.root.getStrTimesByLenght(q);
 		// Turn to array, to be able to sort in-place and in parallel, if possible
 		// https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Arrays.html#parallelSort(T[])
 		SortablePair[] strsDepthQ = new SortablePair[stringsDepthQ.size()];
@@ -47,9 +47,11 @@ public class SuffixTree {
 		Arrays.parallelSort(strsDepthQ);
 		// Copies the strings in the last elements of the array
 		int strs_depth_q_len = strsDepthQ.length;
+		int text_index;
 		for (int i = 0; i < k; i++) {
 			if (strs_depth_q_len - i > 0) {
-				result[i] = strsDepthQ[strs_depth_q_len - i - 1].getSecond();
+				text_index = strsDepthQ[strs_depth_q_len - i - 1].getSecond();
+				result[i] = this.getSubString(text_index, text_index + q);
 			} else {
 				result[i] = null;
 			}

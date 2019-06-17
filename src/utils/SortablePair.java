@@ -2,9 +2,9 @@ package utils;
 
 public class SortablePair implements Comparable<SortablePair> {
 	private final Integer first;
-	private final String second;
+	private final Integer second;
 
-	public SortablePair(Integer first, String second) {
+	public SortablePair(Integer first, Integer second) {
 		this.first = first;
 		this.second = second;
 	}
@@ -13,7 +13,7 @@ public class SortablePair implements Comparable<SortablePair> {
 		return this.first;
 	}
 
-	public String getSecond() {
+	public Integer getSecond() {
 		return this.second;
 	}
 

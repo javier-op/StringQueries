@@ -5,6 +5,7 @@ import utils.SortablePair;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Stack;
 
 class SuffixNode {
@@ -33,28 +34,22 @@ class SuffixNode {
 		return this.leaves;
 	}
 
-	public ArrayList<SortablePair> getStrTimesByLenght(int depth, String read) {
+	public ArrayList<SortablePair> getStrTimesByLenght(int depth) {
 		ArrayList<SortablePair> result = new ArrayList<>();
 		if (depth <= 0) {
 			// If the depth has been reached
-			if (depth < 0) {
-				// Cut extra characters in the reading, if necessary
-				read = read.substring(0, read.length() + depth);
-			}
-			// Add the amount of leaves and the string already read to the result
-			result.add(new SortablePair(this.leaves.size(), read));
+			// Add the amount of leaves and the text position of one of the leaves to the result
+			Iterator<SuffixNode> leaves = this.leaves.iterator();
+			result.add(new SortablePair(this.leaves.size(), leaves.next().value));
 		} else {
 			// Recursively get nodes with more depth through all the edges from this node
 			Edge edge;
-			int edge_from, edge_len;
+			int edge_len;
 			for (char c : this.edges.keySet()) {
-				// Get an edge, add its substring to read, diminish depth with its length and
-				// get nodes by depth in it
+				// Get an edge, diminish depth with its length and get nodes by depth in it
 				edge = this.edges.get(c);
-				edge_from = edge.getFrom();
 				edge_len = edge.length();
-				String substr = this.tree.getSubString(edge_from, edge_from + edge_len);
-				result.addAll(edge.getNode().getStrTimesByLenght(depth - edge_len, read + substr));
+				result.addAll(edge.getNode().getStrTimesByLenght(depth - edge_len));
 			}
 		}
 		return result;
