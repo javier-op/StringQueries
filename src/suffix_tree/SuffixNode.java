@@ -53,7 +53,7 @@ class SuffixNode {
 				edge = this.edges.get(c);
 				edge_from = edge.getFrom();
 				edge_len = edge.length();
-				String substr = this.tree.getSubString(edge_from, edge_from + edge_len - 1);
+				String substr = this.tree.getSubString(edge_from, edge_from + edge_len);
 				result.addAll(edge.getNode().getStrTimesByLenght(depth - edge_len, read + substr));
 			}
 		}

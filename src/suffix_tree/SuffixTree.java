@@ -46,8 +46,13 @@ public class SuffixTree {
 		// Uses parallelSort to sort the array for the number of appearances ascending
 		Arrays.parallelSort(strsDepthQ);
 		// Copies the strings in the last elements of the array
+		int strs_depth_q_len = strsDepthQ.length;
 		for (int i = 0; i < k; i++) {
-			result[i] = strsDepthQ[strsDepthQ.length - i - 1].getSecond();
+			if (strs_depth_q_len - i > 0) {
+				result[i] = strsDepthQ[strs_depth_q_len - i - 1].getSecond();
+			} else {
+				result[i] = null;
+			}
 		}
 		return result;
 	}
