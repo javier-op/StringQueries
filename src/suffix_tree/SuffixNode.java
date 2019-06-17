@@ -1,5 +1,8 @@
 package suffix_tree;
 
+import utils.Pair;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Stack;
@@ -28,6 +31,33 @@ class SuffixNode {
 
 	HashSet<SuffixNode> getLeaves() {
 		return this.leaves;
+	}
+
+	public ArrayList<Pair<Integer, String>> getStrTimesByLenght(int depth, String read) {
+		ArrayList<Pair<Integer, String>> result = new ArrayList<>();
+		if (depth <= 0) {
+			// If the depth has been reached
+			if (depth < 0) {
+				// Cut extra characters in the reading, if necessary
+				read = read.substring(0, read.length() + depth);
+			}
+			// Add the amount of leaves and the string already read to the result
+			result.add(new Pair<>(this.leaves.size(), read));
+		} else {
+			// Recursively get nodes with more depth through all the edges from this node
+			Edge edge;
+			int edge_from, edge_len;
+			for (char c : this.edges.keySet()) {
+				// Get an edge, add its substring to read, diminish depth with its length and
+				// get nodes by depth in it
+				edge = this.edges.get(c);
+				edge_from = edge.getFrom();
+				edge_len = edge.length();
+				String substr = this.tree.getSubString(edge_from, edge_from + edge_len - 1);
+				result.addAll(edge.getNode().getStrTimesByLenght(depth - edge_len, read + substr));
+			}
+		}
+		return result;
 	}
 
 	void insert(int index, int original_index, Stack<SuffixNode> parents) {
