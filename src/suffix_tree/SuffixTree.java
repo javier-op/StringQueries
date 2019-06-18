@@ -35,6 +35,14 @@ public class SuffixTree {
 		return output;
 	}
 
+
+	/**
+	 * Returns the k strings of length q with more appearances in the text
+	 *
+	 * @param k Amount of strings to get
+	 * @param q Length of the strings to search
+	 * @return Array of the k strings of length q with more appearances in the text
+	 */
 	public String[] top_K_Q(int k, int q) {
 		String[] result = new String[k];
 		// Get all the strings of length q with their number of appearances
