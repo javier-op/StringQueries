@@ -28,7 +28,11 @@ public class SuffixTree {
 	 * @return The number of appearances
 	 */
 	public int count(String word) {
-		return this.root.search(word).getLeaves().size();
+		SuffixNode target = this.root.search(word);
+		if (target == null) {
+			return 0;
+		}
+		return target.getLeaves().size();
 	}
 
 	/**
