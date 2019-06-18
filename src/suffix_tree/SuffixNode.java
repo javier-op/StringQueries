@@ -55,6 +55,12 @@ class SuffixNode {
 		return result;
 	}
 
+    /**
+     * Inserts in the node the substring of text in the tree, from index to end
+     * @param index Starting position from which to insert in this node
+     * @param original_index Starting position of the original substring inserted
+     * @param parents Stack of parents of this node
+     */
 	void insert(int index, int original_index, Stack<SuffixNode> parents) {
 		int remaining_len_from_index = this.tree.getTextLenght() - index;
 		char first_char = this.tree.getChar(index);
@@ -128,22 +134,27 @@ class SuffixNode {
 		}
 	}
 
-	SuffixNode search(String text) {
-		char first_char = text.charAt(0);
+    /**
+     * Searches the node in this subtree that matches with word
+     * @param word String to match
+     * @return A node that matches, or null if none exists.
+     */
+	SuffixNode search(String word) {
+		char first_char = word.charAt(0);
 		SuffixNode output = null;
 		if (this.edges.containsKey(first_char)) {
 			Edge fitting_edge = this.edges.get(first_char);
-			int text_len = text.length();
+			int text_len = word.length();
 			int edge_len = fitting_edge.length();
 			int edge_from = fitting_edge.getFrom();
 
-			if (text.length() <= edge_len) {
-				if (text.equals(this.tree.getSubString(edge_from, edge_from + text_len))) {
+			if (word.length() <= edge_len) {
+				if (word.equals(this.tree.getSubString(edge_from, edge_from + text_len))) {
 					output = fitting_edge.getNode();
 				}
 			} else {
-				if (text.substring(0, edge_len).equals(this.tree.getSubString(edge_from, edge_from + edge_len))) {
-					output = fitting_edge.getNode().search(text.substring(edge_len));
+				if (word.substring(0, edge_len).equals(this.tree.getSubString(edge_from, edge_from + edge_len))) {
+					output = fitting_edge.getNode().search(word.substring(edge_len));
 				}
 			}
 		}

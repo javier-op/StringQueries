@@ -21,12 +21,27 @@ public class SuffixTree {
 		}
 	}
 
-	public int count(String text) {
-		return this.root.search(text).getLeaves().size();
+	/**
+	 * Counts the number of appearances of word in the text
+	 *
+	 * @param word String to count
+	 * @return The number of appearances
+	 */
+	public int count(String word) {
+		return this.root.search(word).getLeaves().size();
 	}
 
-	public Integer[] locate(String text) {
-		HashSet<SuffixNode> leaves = this.root.search(text).getLeaves();
+	/**
+	 * Locates the appearances of word in the text
+	 * @param word String to locate
+	 * @return Array of integers, the positions of word in the text
+	 */
+	public Integer[] locate(String word) {
+		SuffixNode target = this.root.search(word);
+		if (target == null) {
+			return new Integer[0];
+		}
+		HashSet<SuffixNode> leaves = target.getLeaves();
 		Integer[] output = new Integer[leaves.size()];
 		int i = 0;
 		for (SuffixNode node : leaves) {
@@ -79,6 +94,10 @@ public class SuffixTree {
 		return this.text.substring(from, to);
 	}
 
+	/**
+	 * Inserts in the tree the substring of the text, from index to end
+	 * @param index Starting position from which to insert
+	 */
 	private void insert(int index) {
 		this.root.insert(index, index, new Stack<>());
 	}
