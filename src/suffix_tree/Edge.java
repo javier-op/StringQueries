@@ -16,6 +16,10 @@ class Edge {
 		return this.from;
 	}
 
+	/**
+	 * Moves the from value of the Edge and recalculates its length
+	 * @param i New from value
+	 */
 	void setFrom(int i) {
 		int prev_from = this.from;
 		this.from = i;
