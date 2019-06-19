@@ -137,7 +137,6 @@ public class Main {
 		} else {
 			System.out.println("Test para secuencias de ADN.");
 		}
-		Runtime runtime = Runtime.getRuntime();
 		long[] tree_build_time = new long[N];
 		long[] number_of_nodes = new long[N];
 		ArrayList<int[]> all_lenP = new ArrayList<>();
