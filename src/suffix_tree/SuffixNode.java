@@ -14,12 +14,14 @@ class SuffixNode {
 	private HashSet<SuffixNode> leaves; // Direct link to all leaves that hang from this node.
 	private Integer value; // Pointer to text used in leaves.
 	private SuffixTree tree;
+	private int total_size;
 
 	SuffixNode(SuffixTree tree) {
 		this.edges = new HashMap<>();
 		this.leaves = new HashSet<>();
 		this.value = null;
 		this.tree = tree;
+		this.total_size = 1;
 	}
 
 	Integer getValue() {
@@ -88,6 +90,7 @@ class SuffixNode {
 
 				// New intermediate node
 				SuffixNode division_node = new SuffixNode(this.tree);
+				division_node.setTotalSize(current_edge.getNode().getTotalSize() + 2);
 				Edge division_edge = new Edge(Math.min(current_from_index, index), division, division_node);
 
 				// New leaf
@@ -113,6 +116,7 @@ class SuffixNode {
 				while (!parents.isEmpty()) {
 					SuffixNode node = parents.pop();
 					node.addLeaf(input_node);
+					node.incrementTotalSize(2);
 				}
 			}
 		} else {
@@ -124,12 +128,14 @@ class SuffixNode {
 			newNode.addLeaf(newNode);
 			Edge newEdge = new Edge(index, remaining_len_from_index, newNode);
 			this.edges.put(this.tree.getChar(index), newEdge);
+			this.incrementTotalSize(1);
 
 			// Add a reference to the new leaf to this node and its parents.
 			this.addLeaf(newNode);
 			while (!parents.isEmpty()) {
 				SuffixNode node = parents.pop();
 				node.addLeaf(newNode);
+				node.incrementTotalSize(1);
 			}
 		}
 	}
@@ -171,5 +177,17 @@ class SuffixNode {
 
 	private void addLeaves(HashSet<SuffixNode> leaves) {
 		this.leaves.addAll(leaves);
+	}
+
+	private void setTotalSize(int n) {
+		this.total_size = n;
+	}
+
+	private void incrementTotalSize(int n) {
+		this.total_size += n;
+	}
+
+	public int getTotalSize() {
+		return this.total_size;
 	}
 }

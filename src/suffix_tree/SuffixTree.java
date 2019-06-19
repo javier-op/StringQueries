@@ -21,6 +21,10 @@ public class SuffixTree {
 		}
 	}
 
+	public int size() {
+		return root.getTotalSize();
+	}
+
 	/**
 	 * Counts the number of appearances of word in the text
 	 *

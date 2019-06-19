@@ -130,9 +130,16 @@ public class Main {
 	}
 
 	//TESTS DE TIEMPOS
-	public static void testTiempos(int N, int base){
+	public static void testTiempos(int N, char origin_text){
+		assert origin_text == 'e' || origin_text == 'd';
+		if(origin_text == 'e') {
+			System.out.println("Test para texto en ingles.");
+		} else {
+			System.out.println("Test para secuencias de ADN.");
+		}
+		Runtime runtime = Runtime.getRuntime();
 		long[] tree_build_time = new long[N];
-		long[] tree_size = new long[N];
+		long[] number_of_nodes = new long[N];
 		ArrayList<int[]> all_lenP = new ArrayList<>();
 		ArrayList<long[]> all_count_time = new ArrayList<>();
 		ArrayList<long[]> all_locate_time = new ArrayList<>();
@@ -140,12 +147,16 @@ public class Main {
 		ArrayList<int[]> all_q = new ArrayList<>();
 		ArrayList<long[]> all_topk_time = new ArrayList<>();
 
+		File directory = new File("results");
+		if (!directory.exists()){
+			directory.mkdir();
+		}
 
 		for(int i = 10; i<N+10; i++){
 			//obtener texto tamaño i
 			System.out.println("Iteracion " + i + ".\tCreando substrings");
 			String texto_i;
-			if(base==0) {
+			if(origin_text=='e') {
 				texto_i = twoNString(i, "data/english_proc");
 			}else{
 				texto_i = twoNString(i, "data/dna_proc");
@@ -164,7 +175,7 @@ public class Main {
 
 			//medir tamaño del arbol en disco
 
-			tree_size[i-10] = 0;// Es dificil sacar la memoria del arbol y todos los nodos
+			number_of_nodes[i-10] = st.size();// Es dificil sacar la memoria del arbol y todos los nodos
 
 			System.out.println("Iteracion " + i + ".\tRealizando consultas count & locate");
 			//realizar consultas count y locate
@@ -194,7 +205,7 @@ public class Main {
 			int[] list_q_eng = {4, 5, 6, 7};
 			int[] list_q_dna = {4, 8, 16, 32};
 			int[] list_q;
-			if(base==0){
+			if(origin_text=='d'){
 				list_q = list_q_eng.clone();
 			}else{
 				list_q = list_q_dna.clone();
@@ -221,19 +232,20 @@ public class Main {
 		}
 		//guardar mediciones
 		System.out.println("Creando archivos de datos");
-		createFileint("results/tree_build_time", tree_build_time);
-		createFileint("results/tree_size", tree_size);
-		createFileintlist("results/all_lenP", all_lenP);
-		createFilelong("results/all_count_time", all_count_time);
-		createFilelong("results/all_locate_time", all_locate_time);
-		createFileintlist("results/all_k", all_k);
-		createFileintlist("results/all_q", all_q);
-		createFilelong("results/all_topk_time", all_topk_time);
+		createFileint("results/tree_build_time_" + origin_text, tree_build_time);
+		createFileint("results/nodes_" + origin_text, number_of_nodes);
+		createFileintlist("results/all_lenP_" + origin_text, all_lenP);
+		createFilelong("results/all_count_time_" + origin_text, all_count_time);
+		createFilelong("results/all_locate_time_" + origin_text, all_locate_time);
+		createFileintlist("results/all_k_" + origin_text, all_k);
+		createFileintlist("results/all_q_" + origin_text, all_q);
+		createFilelong("results/all_topk_time_" + origin_text, all_topk_time);
 	}
 
 	public static void main(String[] args) {
 		//descomentar para obtener los textos preprocesados
 		//preprocess();
-		testTiempos(2, 0);
+		testTiempos(5, 'e');
+		testTiempos(5, 'd');
 	}
 }
