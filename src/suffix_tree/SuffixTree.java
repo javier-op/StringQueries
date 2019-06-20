@@ -3,8 +3,8 @@ package suffix_tree;
 import utils.SortablePair;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
+import java.util.PriorityQueue;
 import java.util.Stack;
 
 public class SuffixTree {
@@ -74,18 +74,23 @@ public class SuffixTree {
 		// https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Arrays.html#parallelSort(T[])
 		SortablePair[] strsDepthQ = new SortablePair[stringsDepthQ.size()];
 		stringsDepthQ.toArray(strsDepthQ);
-		// Uses parallelSort to sort the array for the number of appearances ascending
-		Arrays.parallelSort(strsDepthQ);
-		// Copies the strings in the last elements of the array
-		int strs_depth_q_len = strsDepthQ.length;
+		// Create a priority queue to sort the array
+		int queue_size = Math.min(k, strsDepthQ.length);
+		PriorityQueue<SortablePair> sorting_queue = new PriorityQueue<>(queue_size + 1);
+		// Insert the first k pairs (or less, if result amount is smaller) in the queue
+		for (int i = 0; i < queue_size; i++){
+			sorting_queue.add(strsDepthQ[i]);
+		}
+		// Add the remaining pairs one by one, maintaining size
+		for (int i = queue_size + 1; i < strsDepthQ.length; i++){
+			sorting_queue.offer(strsDepthQ[i]);
+			sorting_queue.poll();
+		}
+		// Copies the strings in the queue to the result array
 		int text_index;
-		for (int i = 0; i < k; i++) {
-			if (strs_depth_q_len - i > 0) {
-				text_index = strsDepthQ[strs_depth_q_len - i - 1].getSecond();
-				result[i] = this.getSubString(text_index, text_index + q);
-			} else {
-				result[i] = null;
-			}
+		for (int i = 0; i < queue_size; i++) {
+			text_index = sorting_queue.poll().getSecond();
+			result[queue_size - i - 1] = this.getSubString(text_index, text_index + q);
 		}
 		return result;
 	}
