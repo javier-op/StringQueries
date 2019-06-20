@@ -109,9 +109,9 @@ public class Main {
 			}
 			System.out.println("Iteracion " + i + ".\tCreando arbol");
 			//crear arbol
-			long start = System.currentTimeMillis();
+			long start = System.nanoTime();
 			st = new SuffixTree(texto_i);
-			tree_build_time[i-10] = System.currentTimeMillis() - start;
+			tree_build_time[i-10] = System.nanoTime() - start;
 
 			//medir tamaño del arbol en disco
 
@@ -125,12 +125,12 @@ public class Main {
 		for(int i=0; i < op_iterations; i++){
 			String a = randomString(mode);
 			lenP[i] = a.length();
-			long start_count = System.currentTimeMillis();
+			long start_count = System.nanoTime();
 			st.count(a);
-			count_time[i] = System.currentTimeMillis() - start_count;
-			long start_locate = System.currentTimeMillis();
+			count_time[i] = System.nanoTime() - start_count;
+			long start_locate = System.nanoTime();
 			st.locate(a);
-			locate_time[i] = System.currentTimeMillis() - start_locate;
+			locate_time[i] = System.nanoTime() - start_locate;
 		}
 
 
@@ -140,9 +140,9 @@ public class Main {
 			k[i] = current_k;
 			int current_q = randomQ(mode);
 			q[i] = current_q;
-			long start_topkq = System.currentTimeMillis();
+			long start_topkq = System.nanoTime();
 			st.top_K_Q(current_k, current_q);
-			topk_time[i] = System.currentTimeMillis() - start_topkq;
+			topk_time[i] = System.nanoTime() - start_topkq;
 		}
 
 		//guardar mediciones
@@ -160,7 +160,7 @@ public class Main {
 	public static void main(String[] args) {
 		//descomentar para obtener los textos preprocesados
 		//preprocess();
-		testTiempos(7, 'e');
-		testTiempos(7, 'd');
+		testTiempos(8, 'e');
+		testTiempos(8, 'd');
 	}
 }
