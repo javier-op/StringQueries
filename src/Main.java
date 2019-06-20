@@ -11,7 +11,8 @@ public class Main {
 
 	private static final int[] len = {8, 16, 32, 64};
 	private static final int[] k = {3, 5, 10};
-	private static final int[] q = {4, 8, 16, 32};
+	private static final int[] q_e = {4, 5, 6, 7};
+	private static final int[] q_d = {4, 8, 16, 32};
 	private static final Random r = new Random();
 	private static String text;
 	private static String[] words;
@@ -49,7 +50,8 @@ public class Main {
 		return k[choice];
 	}
 
-	private static int randomQ() {
+	private static int randomQ(char mode) {
+		int[] q = (mode == 'e') ? q_e: q_d;
 		int choice = r.nextInt(q.length);
 		return q[choice];
 	}
@@ -136,7 +138,7 @@ public class Main {
 		for(int i=0; i < op_iterations; i++){
 			int current_k = randomK();
 			k[i] = current_k;
-			int current_q = randomQ();
+			int current_q = randomQ(mode);
 			q[i] = current_q;
 			long start_topkq = System.currentTimeMillis();
 			st.top_K_Q(current_k, current_q);
