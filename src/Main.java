@@ -135,7 +135,7 @@ public class Main {
 
 
 		System.out.println("Realizando consultas topK-Q");
-		for(int i=0; i < op_iterations; i++){
+		for(int i=0; i < op_iterations/10; i++){
 			int current_k = randomK();
 			k[i] = current_k;
 			int current_q = randomQ(mode);
@@ -160,7 +160,7 @@ public class Main {
 	public static void main(String[] args) {
 		//descomentar para obtener los textos preprocesados
 		//preprocess();
-		testTiempos(8, 'e');
-		testTiempos(8, 'd');
+		testTiempos(11, 'e');
+		testTiempos(11, 'd');
 	}
 }
